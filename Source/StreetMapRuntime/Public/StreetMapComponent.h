@@ -162,7 +162,9 @@ protected:
 	//** Physics data for mesh collision. */
 	UPROPERTY(Transient)
 		UBodySetup* StreetMapBodySetup;
-
+	
+	UPROPERTY(Transient, EditAnywhere, Category = "StreetMapSPlines")
+		TArray<class USplineComponent*> StreetMapSplines;
 
 protected:
 	//

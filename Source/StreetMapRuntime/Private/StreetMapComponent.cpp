@@ -12,6 +12,7 @@
 #if WITH_EDITOR
 #include "Modules/ModuleManager.h"
 #include "PropertyEditorModule.h"
+#include "Components/SplineComponent.h"
 #endif //WITH_EDITOR
 
 
@@ -44,7 +45,11 @@ UStreetMapComponent::UStreetMapComponent(const FObjectInitializer& ObjectInitial
 
 	static ConstructorHelpers::FObjectFinder<UMaterialInterface> DefaultMaterialAsset(TEXT("/StreetMap/StreetMapDefaultMaterial"));
 	StreetMapDefaultMaterial = DefaultMaterialAsset.Object;
-
+	
+	StreetMapSplines.Add(CreateDefaultSubobject<USplineComponent>(TEXT("SplineMapComp1")));
+	/*StreetMapSplines.Add(CreateDefaultSubobject<USplineComponent>(TEXT("SplineMapComp2")));
+	StreetMapSplines.Add(CreateDefaultSubobject<USplineComponent>(TEXT("SplineMapComp3")));
+	StreetMapSplines.Add(CreateDefaultSubobject<USplineComponent>(TEXT("SplineMapComp4")));*/
 }
 
 
@@ -247,6 +252,14 @@ void UStreetMapComponent::GenerateMesh()
 
 		for( const auto& Road : Roads )
 		{
+			
+			FString test = Road.RoadName;
+			FName name = FName(*test);			
+			auto spline = NewObject<USplineComponent>(this,USplineComponent::StaticClass());
+			
+			spline->AppendName(test);
+			StreetMapSplines.Add(spline);
+			
 			float RoadThickness = StreetThickness;
 			FColor RoadColor = StreetColor;
 			switch( Road.RoadType )
@@ -269,9 +282,10 @@ void UStreetMapComponent::GenerateMesh()
 					check( 0 );
 					break;
 			}
-			
+			spline->SetWorldLocation(FVector(Road.RoadPoints[ 0 ].X, Road.RoadPoints[ 0 ].Y, RoadZ));
 			for( int32 PointIndex = 0; PointIndex < Road.RoadPoints.Num() - 1; ++PointIndex )
 			{
+				// spline->AddSplinePoint()
 				AddThick2DLine( 
 					Road.RoadPoints[ PointIndex ],
 					Road.RoadPoints[ PointIndex + 1 ],

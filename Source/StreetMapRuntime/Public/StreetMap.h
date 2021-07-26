@@ -104,7 +104,7 @@ public:
 		bWant3DBuildings(true),
 		bWantLitBuildings(true),
 		StreetThickness(800.0f),
-		StreetColor(0.05f, 0.75f, 0.05f),
+		StreetColor(1.0f, 0.0f, 0.0f),
 		MajorRoadThickness(1000.0f),
 		MajorRoadColor(0.15f, 0.85f, 0.15f),
 		HighwayThickness(1400.0f),
