@@ -1,5 +1,5 @@
 // Copyright 2017 Mike Fricker. All Rights Reserved.
-
+//test
 namespace UnrealBuildTool.Rules
 {
   public class StreetMapRuntime : ModuleRules
