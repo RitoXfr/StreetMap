@@ -3,8 +3,6 @@
 #include "StreetMapComponent.h"
 #include "StreetMapRuntime.h"
 #include "StreetMapSceneProxy.h"
-#include "Runtime/Engine/Classes/Engine/StaticMesh.h"
-#include "Runtime/Engine/Public/StaticMeshResources.h"
 #include "PolygonTools.h"
 
 #include "PhysicsEngine/BodySetup.h"
@@ -24,7 +22,7 @@ UStreetMapComponent::UStreetMapComponent(const FObjectInitializer& ObjectInitial
 {
 	// We make sure our mesh collision profile name is set to NoCollisionProfileName at initialization. 
 	// Because we don't have collision data yet!
-	SetCollisionProfileName(UCollisionProfile::NoCollision_ProfileName);
+	UPrimitiveComponent::SetCollisionProfileName(UCollisionProfile::NoCollision_ProfileName);
 
 	// We don't currently need to be ticked.  This can be overridden in a derived class though.
 	PrimaryComponentTick.bCanEverTick = false;
@@ -247,17 +245,15 @@ void UStreetMapComponent::GenerateMesh()
 		MeshBoundingBox.Init();
 
 		const auto& Roads = StreetMap->GetRoads();
-		const auto& Nodes = StreetMap->GetNodes();
+		
 		const auto& Buildings = StreetMap->GetBuildings();
-
+		int index = 0;
 		for( const auto& Road : Roads )
-		{
-			
-			FString test = Road.RoadName;
-			FName name = FName(*test);			
+		{			
+			FString test = Road.RoadName;	
 			auto spline = NewObject<USplineComponent>(this,USplineComponent::StaticClass());
-			
-			spline->AppendName(test);
+			// auto spline = NewObject<USplineComponent>(this,USplineComponent::StaticClass(), FText::Format("spline {0}", index));
+			++index;
 			StreetMapSplines.Add(spline);
 			
 			float RoadThickness = StreetThickness;
@@ -285,7 +281,8 @@ void UStreetMapComponent::GenerateMesh()
 			spline->SetWorldLocation(FVector(Road.RoadPoints[ 0 ].X, Road.RoadPoints[ 0 ].Y, RoadZ));
 			for( int32 PointIndex = 0; PointIndex < Road.RoadPoints.Num() - 1; ++PointIndex )
 			{
-				// spline->AddSplinePoint()
+				spline->AddSplinePoint(FVector(Road.RoadPoints[ PointIndex ], RoadZ), ESplineCoordinateSpace::World, true);
+				
 				AddThick2DLine( 
 					Road.RoadPoints[ PointIndex ],
 					Road.RoadPoints[ PointIndex + 1 ],

@@ -88,7 +88,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "StreetMap")
 		void SetStreetMap(UStreetMap* NewStreetMap, bool bClearPreviousMeshIfAny = false, bool bRebuildMesh = false);
 
-
+	UFUNCTION(BlueprintCallable, Category="StreetMap")
+	FORCEINLINE TArray<class USplineComponent*> GetStreetMapSplines() { return StreetMapSplines; }
 
 	//** Begin Interface_CollisionDataProvider Interface */
 	virtual bool GetPhysicsTriMeshData(struct FTriMeshCollisionData* CollisionData, bool InUseAllTriData) override;

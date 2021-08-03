@@ -14,6 +14,7 @@ class STREETMAPRUNTIME_API AStreetMapActor : public AActor
 	UPROPERTY(Instanced, EditAnywhere, Category = "StreetMap")
 		class UStreetMapComponent* StreetMapComponent;	
 
-public: 
+public:
+	UFUNCTION(BlueprintCallable, Category="StreetMap")
 	FORCEINLINE class UStreetMapComponent* GetStreetMapComponent() { return StreetMapComponent; }
 };
